@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/auth_state_provider.dart';
 import '../viewmodel/auth_viewmodel.dart';
 
 class SignupView extends ConsumerStatefulWidget {

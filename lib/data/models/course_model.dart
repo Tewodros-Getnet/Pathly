@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Course {
   final String id;
   final String title;
@@ -7,6 +9,7 @@ class Course {
   final String category;
   final int lessonsCount;
   final DateTime createdAt;
+  final List<String> tags;
 
   Course({
     required this.id,
@@ -17,11 +20,11 @@ class Course {
     required this.category,
     required this.lessonsCount,
     required this.createdAt,
+    required this.tags,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      "id": id,
       "title": title,
       "description": description,
       "instructorId": instructorId,
@@ -29,19 +32,22 @@ class Course {
       "category": category,
       "lessonsCount": lessonsCount,
       "createdAt": createdAt.toIso8601String(),
+      "tags": tags,
     };
   }
 
-  factory Course.fromMap(Map<String, dynamic> map) {
+  factory Course.fromDoc(DocumentSnapshot doc) {
+    final map = doc.data() as Map<String, dynamic>;
     return Course(
-      id: map["id"],
-      title: map["title"],
-      description: map["description"],
-      instructorId: map["instructorId"],
+      id: doc.id,
+      title: map["title"] ?? "",
+      description: map["description"] ?? "",
+      instructorId: map["instructorId"] ?? "",
       thumbnailUrl: map["thumbnailUrl"],
-      category: map["category"],
-      lessonsCount: map["lessonsCount"],
+      category: map["category"] ?? "General",
+      lessonsCount: map["lessonsCount"] ?? 0,
       createdAt: DateTime.parse(map["createdAt"]),
+      tags: List<String>.from(map["tags"] ?? []),
     );
   }
 }

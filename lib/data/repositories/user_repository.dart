@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../models/user_model.dart';
 
 class UserRepository {
@@ -13,4 +14,44 @@ class UserRepository {
     if (!doc.exists) return null;
     return AppUser.fromMap(doc.data()!);
   }
+
+  Future<AppUser?> getCurrentUserData() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return null;
+
+    final doc = await _db.doc(user.uid).get();
+    return doc.exists ? AppUser.fromDoc(doc) : null;
+  }
+  Stream<AppUser?> streamCurrentUser() async* {
+    await for (var user in FirebaseAuth.instance.authStateChanges()) {
+      if (user == null) {
+        yield null;
+        continue;
+      }
+
+      // Check document
+      final doc = await _db.doc(user.uid).get();
+
+      if (!doc.exists) {
+        print("⚠ No Firestore profile for user — creating one automatically...");
+
+        final newUser = AppUser(
+          id: user.uid,
+          name: user.email?.split("@")[0] ?? "Unknown",
+          email: user.email ?? "",
+          role: "student",  // default role for new users
+          photoUrl: null,
+          createdAt: DateTime.now(),
+        );
+
+        await _db.doc(user.uid).set(newUser.toMap());
+        yield newUser;
+      } else {
+        yield AppUser.fromDoc(doc);
+      }
+    }
+  }
+
+
+
 }
