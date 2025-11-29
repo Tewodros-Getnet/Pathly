@@ -1,63 +1,61 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../providers/auth_state_provider.dart';
 import '../providers/user_providers.dart';
-import 'package:pathlly/presentation/view/login_view..dart';
+
+// NEW final screens we now use
 import 'student_home_view.dart';
 import 'instructor_home_view.dart';
+import 'login_view..dart';
 
 class AuthGate extends ConsumerWidget {
   const AuthGate({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authState = ref.watch(authStateChangesProvider);
+    final authState = ref.watch(authStateChangesProvider);   // listens to login/logout
 
     return authState.when(
-      data: (user) {
-        if (user == null) {
-          return const LoginView();
-        } else {
-          // we have a Firebase user — fetch AppUser profile
-          final userProfileAsync = ref.watch(userByIdProvider(user.uid));
+      loading: () => const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      ),
 
-          return userProfileAsync.when(
-            data: (appUser) {
-              if (appUser == null) {
-                // Profile missing — show simple onboarding or error
-                return Scaffold(
-                  body: Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text('Profile not found. Please complete your profile.'),
-                        const SizedBox(height: 12),
-                        ElevatedButton(
-                          onPressed: () {
-                            // Navigate to a simple profile-completion screen if you create one
-                          },
-                          child: const Text('Complete profile'),
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              }
+      error: (err, _) => Scaffold(
+        body: Center(child: Text("Auth error: $err")),
+      ),
 
-              // Route by role
-              if (appUser.role == 'instructor') {
-                return const InstructorHomeView();
-              } else {
-                return const StudentHomeView();
-              }
-            },
-            loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
-            error: (err, st) => Scaffold(body: Center(child: Text('Error loading profile: $err'))),
-          );
-        }
+      data: (firebaseUser) {
+        // No Firebase user → go to login
+        if (firebaseUser == null) return const LoginView();
+
+        // Now fetch full user profile from Firestore
+        final profile = ref.watch(userByIdProvider(firebaseUser.uid));
+
+        return profile.when(
+          loading: () => const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          ),
+          error: (err, _) => Scaffold(
+            body: Center(child: Text("Profile Load Error: $err")),
+          ),
+
+          data: (appUser) {
+            if (appUser == null) {
+              return const Scaffold(
+                body: Center(
+                  child: Text("⚠ Profile not found in Firestore"),
+                ),
+              );
+            }
+
+            /// 🔥 FINAL ROLE ROUTING
+            return appUser.role == "instructor"
+                ? const InstructorHomeView()
+                : const StudentHomeView();
+          },
+        );
       },
-      loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
-      error: (err, st) => Scaffold(body: Center(child: Text('Auth error: $err'))),
     );
   }
 }

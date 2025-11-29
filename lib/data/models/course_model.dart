@@ -5,49 +5,57 @@ class Course {
   final String title;
   final String description;
   final String instructorId;
+  final DateTime createdAt;
+  final List<String> tags;
   final String? thumbnailUrl;
   final String category;
   final int lessonsCount;
-  final DateTime createdAt;
-  final List<String> tags;
 
   Course({
     required this.id,
     required this.title,
     required this.description,
     required this.instructorId,
-    this.thumbnailUrl,
-    required this.category,
-    required this.lessonsCount,
     required this.createdAt,
     required this.tags,
+    required this.thumbnailUrl,
+    required this.category,
+    required this.lessonsCount,
   });
 
-  Map<String, dynamic> toMap() {
-    return {
-      "title": title,
-      "description": description,
-      "instructorId": instructorId,
-      "thumbnailUrl": thumbnailUrl,
-      "category": category,
-      "lessonsCount": lessonsCount,
-      "createdAt": createdAt.toIso8601String(),
-      "tags": tags,
-    };
+  // ────────────────────────── 🔥 MAIN FIX HERE 🔥 ──────────────────────────
+  factory Course.fromMap(Map<String, dynamic> data) {
+    return Course(
+      id: data['id'],
+      title: data['title'],
+      description: data['description'],
+      instructorId: data['instructorId'],
+      createdAt: data['createdAt'] is Timestamp
+          ? (data['createdAt'] as Timestamp).toDate()
+          : DateTime.parse(data['createdAt'].toString()),
+      tags: List<String>.from(data['tags'] ?? []),
+      thumbnailUrl: data['thumbnailUrl'],
+      category: data['category'] ?? '',
+      lessonsCount: data['lessonsCount'] ?? 0,
+    );
   }
 
   factory Course.fromDoc(DocumentSnapshot doc) {
-    final map = doc.data() as Map<String, dynamic>;
-    return Course(
-      id: doc.id,
-      title: map["title"] ?? "",
-      description: map["description"] ?? "",
-      instructorId: map["instructorId"] ?? "",
-      thumbnailUrl: map["thumbnailUrl"],
-      category: map["category"] ?? "General",
-      lessonsCount: map["lessonsCount"] ?? 0,
-      createdAt: DateTime.parse(map["createdAt"]),
-      tags: List<String>.from(map["tags"] ?? []),
-    );
+    final data = doc.data() as Map<String, dynamic>;
+    return Course.fromMap(data);
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      "id": id,
+      "title": title,
+      "description": description,
+      "instructorId": instructorId,
+      "createdAt": createdAt.toIso8601String(), // stored as string
+      "tags": tags,
+      "thumbnailUrl": thumbnailUrl,
+      "category": category,
+      "lessonsCount": lessonsCount,
+    };
   }
 }
