@@ -37,8 +37,6 @@ class _SignupViewState extends ConsumerState<SignupView> {
                   style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 20),
-
-
                 TextField(
                   controller: emailController,
                   decoration: const InputDecoration(
@@ -47,7 +45,6 @@ class _SignupViewState extends ConsumerState<SignupView> {
                   ),
                 ),
                 const SizedBox(height: 20),
-
                 TextField(
                   controller: passController,
                   obscureText: true,
@@ -57,7 +54,6 @@ class _SignupViewState extends ConsumerState<SignupView> {
                   ),
                 ),
                 const SizedBox(height: 20),
-
                 DropdownButtonFormField<String>(
                   initialValue: selectedRole,
                   items: const [
@@ -77,12 +73,11 @@ class _SignupViewState extends ConsumerState<SignupView> {
                 const SizedBox(height: 30),
 
                 state.isLoading
-                    ? const CircularProgressIndicator()
+                    ? const CircularProgressIndicator(color: Colors.blue)
                     : SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.blue,
-                      foregroundColor: Colors.white,
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.blue, foregroundColor: Colors.white,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),),
 
                     onPressed: state.isLoading
@@ -103,7 +98,7 @@ class _SignupViewState extends ConsumerState<SignupView> {
                       }
                     },
                     child: state.isLoading
-                        ? const CircularProgressIndicator(color: Colors.white)
+                        ? const CircularProgressIndicator(color: Colors.blue)
                         : const Text("Signup"),
                   ),
 

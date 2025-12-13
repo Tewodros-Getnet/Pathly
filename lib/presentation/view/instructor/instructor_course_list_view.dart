@@ -18,7 +18,7 @@ class InstructorCourseListView extends ConsumerWidget {
       appBar: AppBar(title: const Text("  Courses"),
       centerTitle: true,),
       body: coursesAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const Center(child: CircularProgressIndicator(color: Colors.blue)),
         error: (e, _) => Center(child: Text("Error: $e")),
         data: (courses) {
           if (courses.isEmpty) {

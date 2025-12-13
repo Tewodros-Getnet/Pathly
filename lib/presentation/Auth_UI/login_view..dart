@@ -55,7 +55,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
 
                 // Login button
                 state.isLoading
-                    ? const Center(child: CircularProgressIndicator())
+                    ? const Center(child: CircularProgressIndicator(color: Colors.blue))
                     : SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -74,6 +74,7 @@ class _LoginViewState extends ConsumerState<LoginView> {
                 ),
 
                 const SizedBox(height: 20),
+
                 Center(
                   child: TextButton(
                     onPressed: () {

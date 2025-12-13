@@ -7,8 +7,7 @@ final userRepositoryProvider = Provider<UserRepository>((ref){
 });
 
 // family provider to fetch AppUser by uid
-final userByIdProvider = FutureProvider.family<AppUser?,
-       String>((ref, uid) async {
+final userByIdProvider = FutureProvider.family<AppUser?,String>((ref, uid) async {
        final repo = ref.read(userRepositoryProvider);
        return await repo.getUser(uid);
 });

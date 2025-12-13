@@ -30,7 +30,7 @@ class InstructorLessonListPage extends ConsumerWidget {
         child: const Icon(Icons.add),
       ),
       body: lessonsAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const Center(child: CircularProgressIndicator(color: Colors.blue)),
         error: (e, _) => Center(child: Text("Error: $e")),
         data: (lessons) {
           if (lessons.isEmpty) return const Center(child: Text("No lessons yet"));

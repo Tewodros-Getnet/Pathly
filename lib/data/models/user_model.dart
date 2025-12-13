@@ -28,13 +28,11 @@ class AppUser {
     };
   }
 
-  // 🟦 Convert Firestore Document → User
   factory AppUser.fromDoc(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
     return AppUser.fromMap(data);
   }
 
-  // 🟩 Convert Map → User
   factory AppUser.fromMap(Map<String, dynamic> data) {
     return AppUser(
       id: data["id"],
