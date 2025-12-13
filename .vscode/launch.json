@@ -1,0 +1,31 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "name": "Launch Edge",
+            "request": "launch",
+            "type": "msedge",
+            "url": "http://localhost:8080",
+            "webRoot": "${workspaceFolder}"
+        },
+
+        {
+            "name": "pathlly",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "pathlly (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "pathlly (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}

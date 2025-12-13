@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pathlly/presentation/viewmodel/course_viewmodel.dart';
 import '../../../data/repositories/user_repository.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../data/models/course_model.dart';
-import '../../../data/repositories/course_repository.dart';
 
 class AddCoursePage extends ConsumerStatefulWidget {
   const AddCoursePage({super.key});

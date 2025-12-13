@@ -46,7 +46,7 @@ class _AddLessonPageState extends ConsumerState<AddLessonPage> {
               if (ok) Navigator.pop(context);
             },
             child: vm.isLoading
-                ? const CircularProgressIndicator(color: Colors.white)
+                ? const CircularProgressIndicator(color: Colors.blue)
                 : const Text("Add Lesson",),
           )
         ]),
